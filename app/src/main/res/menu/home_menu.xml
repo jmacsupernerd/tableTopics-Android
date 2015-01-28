@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/add_button"
+            android:icon="@drawable/ic_action_new"
+            android:title="Add"
+            app:showAsAction="always">
+        <menu>
+            <item
+                    android:id="@+id/add_people_button"
+                    android:title="Add People"
+                    app:showAsAction="always|withText"/>
+            <item
+                    android:id="@+id/add_topic_button"
+                    android:title="Add Topics"
+                    app:showAsAction="always|withText"/>
+        </menu>
+    </item>
+    <item
+            android:id="@+id/overflow"
+            android:title="Overflow"
+            android:icon="@drawable/ic_action_settings"
+            app:showAsAction="always">
+        <menu>
+            <item
+                    android:id="@+id/manage_people_button"
+                    android:title="Manage People"
+                    app:showAsAction="always|withText"/>
+            <item
+                    android:id="@+id/manage_topics_button"
+                    android:title="Manage Topics"
+                    app:showAsAction="always|withText"/>
+        </menu>
+    </item>
+
+</menu>

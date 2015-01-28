@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/manageTitle"
+            android:layout_gravity="center"
+            android:textSize="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Select Row to delete"
+            android:id="@+id/rowToEditText"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/manageTitle"
+            android:layout_centerHorizontal="true"/>
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameListView"
+            android:layout_below="@+id/rowToEditText"
+            android:layout_above="@+id/adView"
+            android:layout_marginTop="10dp"/>
+
+    <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adUnitId="a15214c38dab959"
+            ads:adSize="BANNER"
+            ads:loadAdOnCreate="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

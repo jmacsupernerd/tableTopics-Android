@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/main_layout">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/homeText"
+                android:layout_gravity="center"
+                android:textSize="40dp"
+                android:text="Person"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:textColor="#33b6ea"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/memberName"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="30sp"
+                android:layout_below="@+id/homeText"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text="@string/question_mark"
+                android:clickable="true"
+                android:padding="5dp"/>
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Topic"
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:textSize="40dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:textColor="#33b6ea"
+                android:layout_below="@+id/memberName"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/topicText"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/textView2"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/question_mark"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generate"
+                android:id="@+id/generate"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/topicText"
+                android:gravity="center"
+                android:textAlignment="gravity"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="false"
+                android:layout_centerHorizontal="true"
+                android:background="@color/blue"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+            android:textColor="#ffffffff" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="*Shake to Generate Topic For Person"
+                android:id="@+id/shakeText"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/generate"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textSize="10dp"/>
+
+        <com.google.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                ads:adUnitId="a15214c38dab959"
+                ads:adSize="BANNER"
+                ads:loadAdOnCreate="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="false"
+                android:layout_marginTop="30dp"
+                android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
