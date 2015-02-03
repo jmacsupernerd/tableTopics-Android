@@ -46,18 +46,6 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
     private ProgressDialog progressDialog;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_item_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        deleteAllTopics();
-        addTopic();
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -84,32 +72,23 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final String rowTopic = lv.getItemAtPosition(i).toString();
-//                Log.d("Clicked on  ", "Button");
-//                AlertDialog.Builder adb = new AlertDialog.Builder(
-//                        ManageTopics.this);
-//                adb.setTitle("Delete Topic");
-//                adb.setMessage("Are you sure you want to delete topic: \n"
-//                        + lv.getItemAtPosition(i));
-//                adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        Topic topic = new Topic();
-//                        topic.set_topic(rowTopic);
-//                        db.deleteTopic(topic);
-//                        lv.setAdapter(getTopicsForList(db));
-//                        lv.setTextFilterEnabled(true);
-//                    }
-//                });
-//                adb.setNeutralButton("Cancel", null);
-//                adb.show();
                 Toast.makeText(getBaseContext(), "Swipe left on row", Toast.LENGTH_SHORT).show();
             }
         });
 
         AdView adView = (AdView) this.findViewById(R.id.adView);
         adView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_item_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        addTopic();
+        return super.onOptionsItemSelected(item);
     }
 
     public void deleteAllTopics() {
@@ -143,7 +122,6 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
                 db.deleteAllCategories();
                 Parse.initialize(getBaseContext(), "zAPsYqzpEh7oWXrlJl6nsHXD8eLVuQwZbRZllEOq", "WYSk2gKvyf8W0DRYgStWhg95LOspC7rhpJSrcECQ");
                 ParseAnalytics.trackAppOpened(getIntent());
-                final List<String> categories = new ArrayList<String>();
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Categories");
                 query.whereNotEqualTo("categoryName", "");
                 query.findInBackground(new FindCallback<ParseObject>() {
@@ -201,7 +179,6 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
 
         @Override
         public void create(SwipeMenu menu) {
-            // create "open" item
             SwipeMenuItem openItem = new SwipeMenuItem(
                     getBaseContext());
             openItem.setBackground(R.color.blue);
@@ -209,7 +186,6 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
             openItem.setIcon(android.R.drawable.ic_menu_edit);
             menu.addMenuItem(openItem);
 
-            // create "delete" item
             SwipeMenuItem deleteItem = new SwipeMenuItem(
                     getBaseContext());
             deleteItem.setBackground(R.color.blue);

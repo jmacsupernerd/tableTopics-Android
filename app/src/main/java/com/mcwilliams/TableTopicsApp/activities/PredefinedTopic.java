@@ -68,9 +68,10 @@ public class PredefinedTopic extends BaseActivity {
         TextView title = (TextView) findViewById(R.id.manageTitle);
         TextView rowToEdit = (TextView) findViewById(R.id.rowToEditText);
         rowToEdit.setVisibility(View.INVISIBLE);
+
         AdView adView = (AdView) this.findViewById(R.id.adView);
-        //adRequest.addTestDevice("AEABB4FB3574D973F94737B34850B3F4");
         adView.loadAd(new AdRequest());
+
         lv = (SwipeMenuListView) findViewById(R.id.nameListView);
         if (extras != null) {
             String value = extras.getString("category");
@@ -82,19 +83,16 @@ public class PredefinedTopic extends BaseActivity {
         Parse.initialize(this, "zAPsYqzpEh7oWXrlJl6nsHXD8eLVuQwZbRZllEOq", "WYSk2gKvyf8W0DRYgStWhg95LOspC7rhpJSrcECQ");
         ParseAnalytics.trackAppOpened(getIntent());
         ParseQuery<ParseObject> query = ParseQuery.getQuery(title.getText().toString());
-        // query.whereEqualTo("playerName", "Dan Stemkoski");
         query.whereNotEqualTo("topic", "");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> topicList, ParseException e) {
                 if (e == null) {
                     progressDialog.dismiss();
                     Log.d("TOPICS!!", "Retrieved " + topicList.get(0).toString() + " ---");
-                    System.out.print("Retrieved " + topicList.size() + " ---");
                     for (ParseObject topic : topicList) {
                         String topicName = topic.getString("topic");
                         Log.d("Single TOPIC", topicName);
                         topics.add(topicName);
-                        //ArrayAdapter<String> arrayAdapter = ;
                     }
                     Log.d("Topics Array", topics.toString());
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, topics);
@@ -114,9 +112,8 @@ public class PredefinedTopic extends BaseActivity {
     }
 
     public void saveTopics(ArrayList<String> topics) {
-        //final DatabaseHandler db = new DatabaseHandler(this);
-        for (int i = 0; i < topics.size(); i++) {
-            db.addTopic(new Topic(topics.get(i)));
+        for (String topic: topics) {
+            db.addTopic(new Topic(topic));
         }
         db.deleteAllCategories();
         Intent goHome = new Intent(getBaseContext(), Home.class);
