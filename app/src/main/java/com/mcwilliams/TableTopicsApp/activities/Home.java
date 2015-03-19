@@ -73,7 +73,7 @@ public class Home extends BaseActivity implements ShakeDetector.Listener {
             List<Member> members = db.getAllMembers();
             if (members.size() > 1) {
                 String memberPicked = members.get(Utils.randInt(members.size())).get_name();
-                YoYo.with(Techniques.FlipInX).duration(700).playOn(findViewById(R.id.memberName));
+                YoYo.with(Techniques.Wobble).duration(700).playOn(findViewById(R.id.memberName));
                 memberName.setText(memberPicked);
             } else {
                 memberName.setText(members.get(0).get_name());
@@ -81,7 +81,7 @@ public class Home extends BaseActivity implements ShakeDetector.Listener {
             List<Topic> topics = db.getAllTopics();
             if (topics.size() > 1) {
                 String topicPicked = topics.get(Utils.randInt(topics.size())).get_topic();
-                YoYo.with(Techniques.FlipInX).duration(700).playOn(findViewById(R.id.topicText));
+                YoYo.with(Techniques.Wobble).duration(700).playOn(findViewById(R.id.topicText));
                 topicName.setText(topicPicked);
             } else {
                 topicName.setText(topics.get(0).get_topic());
@@ -92,15 +92,4 @@ public class Home extends BaseActivity implements ShakeDetector.Listener {
             adb.show();
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onStop();
-    }
-
 }

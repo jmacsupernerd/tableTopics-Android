@@ -2,6 +2,7 @@ package com.mcwilliams.TableTopicsApp.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -103,16 +105,19 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
         alert.setTitle("Add Topic");
 
         final View inputView = getLayoutInflater().inflate(R.layout.input_dialog, null);
-
+        final EditText getInput = (EditText) inputView.findViewById(R.id.inputText);
         alert.setView(inputView);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                EditText getInput = (EditText) inputView.findViewById(R.id.inputText);
+
                 String topic = getInput.getText().toString();
                 Log.d("Starting", "String write to DB");
                 db.addTopic(new Topic(topic));
                 lv.setAdapter(getTopicsForList(db));
                 lv.setTextFilterEnabled(true);
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
             }
         });
         alert.setNeutralButton("Predefined Topics", new DialogInterface.OnClickListener() {
@@ -158,6 +163,8 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
                         } else {
                             Log.d("score", "Error: " + e.getMessage());
                         }
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
                     }
                 });
             }
@@ -165,9 +172,25 @@ public class ManageTopics extends BaseActivity implements SwipeMenuListView.OnMe
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
             }
         });
-        alert.show();
+
+        AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(getInput, InputMethodManager.SHOW_FORCED);
+            }
+        });
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+        dialog.show();
     }
 
     public TopicArrayAdapter getTopicsForList(DatabaseHandler db) {

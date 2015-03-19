@@ -8,5 +8,8 @@
         android:id="@+id/inputText"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true" />
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.mcwilliams.TableTopicsApp.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -92,6 +94,7 @@ public class ManagePeople extends BaseActivity implements SwipeMenuListView.OnMe
         alert.setTitle("Add Person");
         View inputView = getLayoutInflater().inflate(R.layout.input_dialog, null);
         final EditText getInput = (EditText) inputView.findViewById(R.id.inputText);
+        getInput.requestFocus();
         alert.setView(inputView);
         alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
@@ -99,15 +102,32 @@ public class ManagePeople extends BaseActivity implements SwipeMenuListView.OnMe
                 db.addMember(new Member(getInput.getText().toString()));
                 lv.setAdapter(getMembersForList(db));
                 lv.setTextFilterEnabled(true);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
             }
         });
-        alert.show();
+
+        AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(getInput, InputMethodManager.SHOW_FORCED);
+            }
+        });
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+        dialog.show();
     }
 
     public PersonArrayAdapter getMembersForList(DatabaseHandler db) {
