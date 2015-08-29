@@ -9,29 +9,14 @@
     <application
         tools:replace="icon, label"
         android:allowBackup="true"
+        android:name=".TableTopicsApplication"
         android:icon="@drawable/ic_launcher"
         android:label="Table Topics"
         android:theme="@style/Theme.App">
 
-
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-
-        <!--<activity-->
-            <!--android:name=".activities.BaseActivity"-->
-            <!--android:label="Table Topics"-->
-            <!--android:screenOrientation="portrait"/>-->
-
-        <!--<activity android:name=".mdactivitiess.MdHome"-->
-            <!--android:label="Table Topics"-->
-            <!--android:screenOrientation="portrait">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
 
         <activity android:name=".activities.Main"
             android:label="Table Topics"
@@ -43,45 +28,7 @@
             </intent-filter>
         </activity>
 
-
-        <!--<activity android:name=".mdactivitiess.ManagePeople"-->
-            <!--android:label="Manage Members"-->
-            <!--android:screenOrientation="portrait"/>-->
-
-        <!--<activity android:name=".mdactivitiess.ManageTopics"-->
-            <!--android:label="Manage Topics"-->
-            <!--android:screenOrientation="portrait"/>-->
-
-        <!--<activity-->
-            <!--android:name=".activities.Home"-->
-            <!--android:label="Table Topics"-->
-            <!--android:screenOrientation="portrait">-->
-
-        <!--</activity>-->
-
-        <!--<activity-->
-            <!--android:name="com.mcwilliams.TableTopicsApp.AddMembers"-->
-            <!--android:label="Add Members"-->
-            <!--android:screenOrientation="portrait"/>-->
-        <!--<activity-->
-            <!--android:name="com.mcwilliams.TableTopicsApp.AddTopics"-->
-            <!--android:label="Add Topics"-->
-            <!--android:screenOrientation="portrait"/>-->
-        <!--<activity-->
-            <!--android:name=".activities.ManagePeople"-->
-            <!--android:label="Manage Members"-->
-            <!--android:screenOrientation="portrait"/>-->
-        <!--<activity-->
-            <!--android:name=".activities.ManageTopics"-->
-            <!--android:label="Manage Topics"-->
-            <!--android:screenOrientation="portrait"/>-->
-
-        <!--<activity-->
-            <!--android:name=".activities.PredefinedTopic"-->
-            <!--android:label="Predefined Topics"-->
-            <!--android:screenOrientation="portrait"/>-->
         <!-- <meta-data android:name="com.crashlytics.ApiKey" android:value="56ed480b2e0151aa946b99e2d5aa9c760f60cf3d"/>-->
-
     </application>
 
 </manifest>

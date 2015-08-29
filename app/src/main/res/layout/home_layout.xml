@@ -55,7 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_action_new"
-        android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"/>
+        android:layout_margin="@dimen/fab_margin"/>
 
 </android.support.design.widget.CoordinatorLayout>
