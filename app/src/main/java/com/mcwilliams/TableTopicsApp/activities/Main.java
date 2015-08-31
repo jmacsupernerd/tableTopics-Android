@@ -37,7 +37,7 @@ import butterknife.OnClick;
 /**
  * Created by joshuamcwilliams on 7/2/15.
  */
-public class Main extends AppCompatActivity {
+public class Main extends AppCompatActivity implements ViewPager.OnPageChangeListener{
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.viewpager)
@@ -56,27 +56,32 @@ public class Main extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         fab.setVisibility(View.GONE);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
+        viewPager.addOnPageChangeListener(this);
+    }
 
-            }
+    private void setupViewPager(ViewPager viewPager) {
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
+        adapter.addFragment(new HomeFragment(), "Home");
+        adapter.addFragment(new Topics(), "Topics");
+        adapter.addFragment(new People(), "People");
+        viewPager.setAdapter(adapter);
+    }
 
-            @Override
-            public void onPageSelected(int i) {
-                if(i == 0){
-                    fab.setVisibility(View.GONE);
-                } else {
-                    fab.setVisibility(View.VISIBLE);
-                }
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
 
-            }
+    }
+    @Override
+    public void onPageSelected(int i) {
+        if(i == 0){
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
+    }
+    @Override
+    public void onPageScrollStateChanged(int i) {
 
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
     }
 
     @OnClick(R.id.fab)
@@ -129,29 +134,5 @@ public class Main extends AppCompatActivity {
             });
         }
         alert.show();
-
-
-//
-//        AlertDialog dialog = alert.create();
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//
-//            @Override
-//            public void onShow(DialogInterface dialog) {
-//                hideKeyboard(true, getInput);
-//            }
-//        });
-//
-//        hideKeyboard(true, getInput);
-//        dialog.show();
     }
-
-    private void setupViewPager(ViewPager viewPager) {
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), "Home");
-        adapter.addFragment(new Topics(), "Topics");
-        adapter.addFragment(new People(), "People");
-        viewPager.setAdapter(adapter);
-    }
-
-
 }
