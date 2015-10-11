@@ -26,6 +26,8 @@ import com.mcwilliams.TableTopicsApp.fragments.People;
 import com.mcwilliams.TableTopicsApp.fragments.Topics;
 import com.mcwilliams.TableTopicsApp.model.Member;
 import com.mcwilliams.TableTopicsApp.model.Topic;
+import com.mcwilliams.TableTopicsApp.model.response.Categories;
+import com.mcwilliams.TableTopicsApp.utils.network.TopicServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by joshuamcwilliams on 7/2/15.
@@ -45,12 +50,14 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     @Bind(R.id.fab) FloatingActionButton fab;
     @Bind(R.id.tabs)
     TabLayout tabLayout;
+    TopicServices topicServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
         ButterKnife.bind(this);
+        topicServices = TableTopicsApplication.retrofit.create(TopicServices.class);
         setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -107,6 +114,24 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
                 public void onClick(DialogInterface dialog, int which) {
                     TableTopicsApplication.db.addTopic(new Topic(getInput.getText().toString()));
                     Topics.reloadData();
+                }
+            });
+            alert.setNeutralButton("Predefined Topics", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Call<Categories> categoriesCall = topicServices.getCategories();
+                    categoriesCall.enqueue(new Callback<Categories>() {
+                        @Override
+                        public void onResponse(Response<Categories> response) {
+                            Log.d("", String.valueOf(response.body().getResults().size()));
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+                            Log.d("", "Error");
+
+                        }
+                    });
                 }
             });
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
