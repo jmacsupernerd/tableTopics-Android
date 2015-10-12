@@ -1,7 +1,9 @@
 package com.mcwilliams.TableTopicsApp.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,21 +14,30 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mcwilliams.TableTopicsApp.FragmentAdapter;
 import com.mcwilliams.TableTopicsApp.R;
 import com.mcwilliams.TableTopicsApp.TableTopicsApplication;
 import com.mcwilliams.TableTopicsApp.arrayadapters.PeopleRVAdapter;
+import com.mcwilliams.TableTopicsApp.arrayadapters.TopicsRvAdapter;
+import com.mcwilliams.TableTopicsApp.databinding.DialogImportTopicsBinding;
+import com.mcwilliams.TableTopicsApp.databinding.LvRowCategoryBinding;
 import com.mcwilliams.TableTopicsApp.fragments.HomeFragment;
 import com.mcwilliams.TableTopicsApp.fragments.People;
 import com.mcwilliams.TableTopicsApp.fragments.Topics;
 import com.mcwilliams.TableTopicsApp.model.Member;
 import com.mcwilliams.TableTopicsApp.model.Topic;
 import com.mcwilliams.TableTopicsApp.model.response.Categories;
+import com.mcwilliams.TableTopicsApp.model.response.TopicsByCategory;
 import com.mcwilliams.TableTopicsApp.utils.network.TopicServices;
 
 import java.util.ArrayList;
@@ -124,12 +135,12 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
                         @Override
                         public void onResponse(Response<Categories> response) {
                             Log.d("", String.valueOf(response.body().getResults().size()));
+                            showPredefinedTopicDialog(response.body().getResults());
                         }
 
                         @Override
                         public void onFailure(Throwable t) {
                             Log.d("", "Error");
-
                         }
                     });
                 }
@@ -159,5 +170,86 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
             });
         }
         alert.show();
+    }
+
+    public void showPredefinedTopicDialog(List<Categories.Category> categoriesList){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Select a category");
+
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        for(Categories.Category categories : categoriesList){
+            final LvRowCategoryBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.lv_row_category, null, false);
+            binding.tvCategory.setText(categories.getCategoryName());
+            binding.tvCategory.setTag(categories.getCategoryName());
+            binding.tvCategory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Call<TopicsByCategory> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
+                    getTopics.enqueue(new Callback<TopicsByCategory>() {
+                        @Override
+                        public void onResponse(Response<TopicsByCategory> response) {
+                            onCategoryClicked(response.body().getResults());
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+
+                        }
+                    });
+
+                }
+            });
+
+            linearLayout.addView(binding.getRoot());
+        }
+
+        linearLayout.setLayoutParams(params);
+
+        alert.setView(linearLayout);
+        alert.show();
+
+    }
+
+    public void onCategoryClicked(List<TopicsByCategory.Topic> topics){
+        final List<Topic> topicList = new ArrayList<>();
+
+        for(TopicsByCategory.Topic topic: topics){
+            Topic newTopic = new Topic(topic.getTopic());
+            topicList.add(newTopic);
+        }
+
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        DialogImportTopicsBinding dialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_import_topics, null, false);
+
+        dialogBinding.tbToolbar.setNavigationIcon(R.drawable.ic_clear_white_24dp);
+        dialogBinding.tbToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialogBinding.tbToolbar.inflateMenu(R.menu.menu);
+        dialogBinding.tbToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                for (Topic topic: topicList) {
+                    TableTopicsApplication.db.addTopic(new Topic(topic.get_topic()));
+                }
+                dialog.dismiss();
+                return true;
+            }
+        });
+
+        dialogBinding.rvTopics.setHasFixedSize(true);
+        dialogBinding.rvTopics.setLayoutManager(new LinearLayoutManager(this));
+        dialogBinding.rvTopics.setAdapter(new TopicsRvAdapter(topicList));
+
+        dialog.setContentView(dialogBinding.getRoot());
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.show();
+
     }
 }

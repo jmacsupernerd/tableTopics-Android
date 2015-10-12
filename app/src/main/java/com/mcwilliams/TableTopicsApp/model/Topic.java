@@ -10,7 +10,6 @@ public class Topic {
 
     public Topic() {
     }
-
     public Topic(String topic) {
         this._topic = topic;
     }
