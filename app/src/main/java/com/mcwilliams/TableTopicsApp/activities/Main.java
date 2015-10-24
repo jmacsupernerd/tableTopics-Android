@@ -24,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.mcwilliams.TableTopicsApp.FragmentAdapter;
 import com.mcwilliams.TableTopicsApp.R;
 import com.mcwilliams.TableTopicsApp.TableTopicsApplication;
@@ -54,13 +57,11 @@ import retrofit.Response;
  * Created by joshuamcwilliams on 7/2/15.
  */
 public class Main extends AppCompatActivity implements ViewPager.OnPageChangeListener{
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.viewpager)
-    ViewPager viewPager;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.viewpager) ViewPager viewPager;
     @Bind(R.id.fab) FloatingActionButton fab;
-    @Bind(R.id.tabs)
-    TabLayout tabLayout;
+    @Bind(R.id.tabs) TabLayout tabLayout;
+    @Bind(R.id.adView) AdView adView;
     TopicServices topicServices;
     private Dialog dialog;
 
@@ -74,6 +75,9 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         fab.setVisibility(View.GONE);
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("6D12C149D56231562E110E3C73BAC46A").build();
+        adView.loadAd(adRequest);
 
         viewPager.addOnPageChangeListener(this);
     }
@@ -94,8 +98,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     public void onPageSelected(int i) {
         if(i == 0){
             fab.setVisibility(View.GONE);
+//            adView.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
+//            adView.setVisibility(View.VISIBLE);
         }
     }
     @Override
