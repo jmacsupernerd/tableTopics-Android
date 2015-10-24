@@ -62,6 +62,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     @Bind(R.id.tabs)
     TabLayout tabLayout;
     TopicServices topicServices;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,13 +130,14 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
             });
             alert.setNeutralButton("Predefined Topics", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(final DialogInterface dialog, int which) {
                     Call<Categories> categoriesCall = topicServices.getCategories();
                     categoriesCall.enqueue(new Callback<Categories>() {
                         @Override
                         public void onResponse(Response<Categories> response) {
                             Log.d("", String.valueOf(response.body().getResults().size()));
                             showPredefinedTopicDialog(response.body().getResults());
+                            dialog.dismiss();
                         }
 
                         @Override
@@ -187,30 +189,32 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
             binding.tvCategory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Call<TopicsByCategory> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
-                    getTopics.enqueue(new Callback<TopicsByCategory>() {
-                        @Override
-                        public void onResponse(Response<TopicsByCategory> response) {
-                            onCategoryClicked(response.body().getResults());
-                        }
-
-                        @Override
-                        public void onFailure(Throwable t) {
-
-                        }
-                    });
-
+                    loadTopicsFromCategories(v);
                 }
             });
-
             linearLayout.addView(binding.getRoot());
         }
-
         linearLayout.setLayoutParams(params);
 
         alert.setView(linearLayout);
-        alert.show();
+        dialog = alert.create();
+        dialog.show();
+    }
 
+    public void loadTopicsFromCategories(View v){
+        Call<TopicsByCategory> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
+        getTopics.enqueue(new Callback<TopicsByCategory>() {
+            @Override
+            public void onResponse(Response<TopicsByCategory> response) {
+                dialog.dismiss();
+                onCategoryClicked(response.body().getResults());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 
     public void onCategoryClicked(List<TopicsByCategory.Topic> topics){
@@ -238,6 +242,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
                 for (Topic topic: topicList) {
                     TableTopicsApplication.db.addTopic(new Topic(topic.get_topic()));
                 }
+                Topics.reloadData();
                 dialog.dismiss();
                 return true;
             }

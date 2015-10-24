@@ -2,10 +2,12 @@ package com.mcwilliams.TableTopicsApp;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.mcwilliams.TableTopicsApp.utils.DatabaseHandler;
 import com.mcwilliams.TableTopicsApp.utils.network.ParseKeyRequestInterceptor;
 import com.squareup.okhttp.OkHttpClient;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
@@ -20,6 +22,7 @@ public class TableTopicsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         db = new DatabaseHandler(this);
 
         OkHttpClient client = new OkHttpClient();
