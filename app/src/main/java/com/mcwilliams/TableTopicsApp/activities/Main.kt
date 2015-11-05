@@ -46,8 +46,8 @@ import com.mcwilliams.TableTopicsApp.utils.network.TopicServices
 import java.util.ArrayList
 
 import butterknife.Bind
-import butterknife.ButterKnife
 import butterknife.OnClick
+import butterknife.bindView
 
 import retrofit.Call
 import retrofit.Callback
@@ -58,16 +58,12 @@ import kotlin.properties.Delegates
  * Created by joshuamcwilliams on 7/2/15.
  */
 class Main : AppCompatActivity(), ViewPager.OnPageChangeListener {
-    @Bind(R.id.toolbar)
-    internal var toolbar: Toolbar by Delegates.notNull()
-    @Bind(R.id.viewpager)
-    internal var viewPager: ViewPager by Delegates.notNull()
-    @Bind(R.id.fab)
-    internal var fab: FloatingActionButton by Delegates.notNull()
-    @Bind(R.id.tabs)
-    internal var tabLayout: TabLayout by Delegates.notNull()
-    @Bind(R.id.adView)
-    internal var adView: AdView by Delegates.notNull()
+
+    val toolbar: Toolbar by bindView(R.id.toolbar)
+    val viewPager: ViewPager by bindView(R.id.viewpager)
+    val fab: FloatingActionButton by bindView(R.id.fab)
+    val tabLayout: TabLayout by bindView(R.id.tabs)
+    val adView: AdView by bindView(R.id.adView)
 
     var topicServices: TopicServices by Delegates.notNull()
     private var dialog: Dialog? = null
@@ -75,12 +71,14 @@ class Main : AppCompatActivity(), ViewPager.OnPageChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_layout)
-        ButterKnife.bind(this)
         topicServices = TableTopicsApplication.retrofit.create(TopicServices::class.java)
         setSupportActionBar(toolbar)
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
         fab.visibility = View.GONE
+        fab.setOnClickListener{
+            fabClicked()
+        }
 
         val adRequest = AdRequest.Builder().addTestDevice("6D12C149D56231562E110E3C73BAC46A").build()
         adView.loadAd(adRequest)
@@ -114,7 +112,6 @@ class Main : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
     }
 
-    @OnClick(R.id.fab)
     fun fabClicked() {
         showDialog(viewPager.adapter.getPageTitle(viewPager.currentItem))
     }
@@ -166,7 +163,7 @@ class Main : AppCompatActivity(), ViewPager.OnPageChangeListener {
             alert.setPositiveButton("Add", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface, which: Int) {
                     TableTopicsApplication.db.addMember(Member(getInput.text.toString()))
-                    People.reloadData()
+//                    People.reloadData()
                 }
             })
             alert.setNegativeButton("Cancel", object : DialogInterface.OnClickListener {

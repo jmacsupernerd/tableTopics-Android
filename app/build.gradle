@@ -68,6 +68,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     kapt 'com.android.databinding:compiler:1.0-rc4'
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
 }
 
