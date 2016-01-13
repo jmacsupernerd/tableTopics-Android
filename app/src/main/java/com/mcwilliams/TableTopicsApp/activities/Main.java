@@ -1,6 +1,5 @@
 package com.mcwilliams.TableTopicsApp.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
@@ -13,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.mcwilliams.TableTopicsApp.FragmentAdapter;
 import com.mcwilliams.TableTopicsApp.R;
 import com.mcwilliams.TableTopicsApp.TableTopicsApplication;
@@ -61,7 +58,6 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     @Bind(R.id.viewpager) ViewPager viewPager;
     @Bind(R.id.fab) FloatingActionButton fab;
     @Bind(R.id.tabs) TabLayout tabLayout;
-    @Bind(R.id.adView) AdView adView;
     TopicServices topicServices;
     private Dialog dialog;
 
@@ -75,9 +71,6 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         fab.setVisibility(View.GONE);
-
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("6D12C149D56231562E110E3C73BAC46A").build();
-        adView.loadAd(adRequest);
 
         viewPager.addOnPageChangeListener(this);
     }
