@@ -69,4 +69,9 @@ public class PeopleRVAdapter extends RecyclerView.Adapter<PeopleRVAdapter.ViewHo
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
+
+    public void addAllMembers(List<Member> members){
+        memberList.clear();
+        memberList.addAll(members);
+    }
 }
