@@ -17,7 +17,7 @@ import retrofit.Retrofit;
 public class TableTopicsApplication extends Application {
     public static DatabaseHandler db;
     public static Retrofit retrofit;
-    public static String DOMAIN_URL = "https://api.parse.com/1/";
+    public static String DOMAIN_URL = "https://api.backendless.com/v1/";
 
     @Override
     public void onCreate() {

@@ -36,7 +36,8 @@ import com.mcwilliams.TableTopicsApp.fragments.People;
 import com.mcwilliams.TableTopicsApp.fragments.Topics;
 import com.mcwilliams.TableTopicsApp.model.Member;
 import com.mcwilliams.TableTopicsApp.model.Topic;
-import com.mcwilliams.TableTopicsApp.model.response.Categories;
+import com.mcwilliams.TableTopicsApp.model.response.CategoryResponse;
+import com.mcwilliams.TableTopicsApp.model.response.CategoryTopicList;
 import com.mcwilliams.TableTopicsApp.model.response.TopicsByCategory;
 import com.mcwilliams.TableTopicsApp.utils.network.TopicServices;
 
@@ -130,12 +131,12 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
             alert.setNeutralButton("Predefined Topics", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(final DialogInterface dialog, int which) {
-                    Call<Categories> categoriesCall = topicServices.getCategories();
-                    categoriesCall.enqueue(new Callback<Categories>() {
+                    Call<CategoryResponse> categoriesCall = topicServices.getCategories();
+                    categoriesCall.enqueue(new Callback<CategoryResponse>() {
                         @Override
-                        public void onResponse(Response<Categories> response) {
-                            Log.d("", String.valueOf(response.body().getResults().size()));
-                            showPredefinedTopicDialog(response.body().getResults());
+                        public void onResponse(Response<CategoryResponse> response) {
+                            Log.d("", String.valueOf(response.body().getData().size()));
+                            showPredefinedTopicDialog(response.body().getData());
                             dialog.dismiss();
                         }
 
@@ -173,7 +174,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         alert.show();
     }
 
-    public void showPredefinedTopicDialog(List<Categories.Category> categoriesList){
+    public void showPredefinedTopicDialog(List<CategoryResponse.Category> categoriesList){
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Select a category");
 
@@ -181,7 +182,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-        for(Categories.Category categories : categoriesList){
+        for(CategoryResponse.Category categories : categoriesList){
             final LvRowCategoryBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.lv_row_category, null, false);
             binding.tvCategory.setText(categories.getCategoryName());
             binding.tvCategory.setTag(categories.getCategoryName());
@@ -201,12 +202,12 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     }
 
     public void loadTopicsFromCategories(View v){
-        Call<TopicsByCategory> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
-        getTopics.enqueue(new Callback<TopicsByCategory>() {
+        Call<CategoryTopicList> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
+        getTopics.enqueue(new Callback<CategoryTopicList>() {
             @Override
-            public void onResponse(Response<TopicsByCategory> response) {
+            public void onResponse(Response<CategoryTopicList> response) {
                 dialog.dismiss();
-                onCategoryClicked(response.body().getResults());
+                onCategoryClicked(response.body().getData());
             }
 
             @Override
@@ -216,10 +217,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         });
     }
 
-    public void onCategoryClicked(List<TopicsByCategory.Topic> topics){
+    public void onCategoryClicked(List<CategoryTopicList.Topic> topics){
         final List<Topic> topicList = new ArrayList<>();
 
-        for(TopicsByCategory.Topic topic: topics){
+        for(CategoryTopicList.Topic topic: topics){
             Topic newTopic = new Topic(topic.getTopic());
             topicList.add(newTopic);
         }

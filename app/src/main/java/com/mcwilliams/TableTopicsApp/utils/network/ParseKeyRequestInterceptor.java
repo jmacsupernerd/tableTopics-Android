@@ -20,8 +20,8 @@ public class ParseKeyRequestInterceptor implements Interceptor{
         Request originalRequest = chain.request();
 
         Request compressedRequest = originalRequest.newBuilder()
-                .addHeader("X-Parse-REST-API-Key", "Jse5QHuuyKHxcDrwQ6qBAMD2f3FjPBcwWclNjTDd")
-                .addHeader("X-Parse-Application-Id","zAPsYqzpEh7oWXrlJl6nsHXD8eLVuQwZbRZllEOq")
+                .addHeader("application-id",  "E66CF4B4-7B10-5D36-FFEB-C9F07111E500")
+                .addHeader("secret-key", "A1661544-B0C9-9B5B-FF60-3BDC1BD32100")
                 .build();
 
         Log.d(TAG, compressedRequest.urlString());

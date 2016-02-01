@@ -1,6 +1,7 @@
 package com.mcwilliams.TableTopicsApp.utils.network;
 
-import com.mcwilliams.TableTopicsApp.model.response.Categories;
+import com.mcwilliams.TableTopicsApp.model.response.CategoryResponse;
+import com.mcwilliams.TableTopicsApp.model.response.CategoryTopicList;
 import com.mcwilliams.TableTopicsApp.model.response.TopicsByCategory;
 
 import retrofit.Call;
@@ -12,10 +13,10 @@ import retrofit.http.Path;
  */
 public interface TopicServices {
 
-    @GET("classes/Categories")
-    Call<Categories> getCategories();
+    @GET("data/Categories")
+    Call<CategoryResponse> getCategories();
 
-    @GET("classes/{category}")
-    Call<TopicsByCategory> getTopicsByCategory(@Path("category") String category);
+    @GET("data/{category}")
+    Call<CategoryTopicList> getTopicsByCategory(@Path("category") String category);
 
 }
