@@ -61,11 +61,21 @@ public class TopicsRvAdapter extends RecyclerView.Adapter<TopicsRvAdapter.ViewHo
 
     }
 
+    public Topic getTopic(int position){
+        return topicList.get(position);
+    }
+
     public interface OnItemClickListener {
         public void onItemClick(View view , int position);
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
+    }
+
+
+    public void addAllTopics(List<Topic> members){
+        topicList.clear();
+        topicList.addAll(members);
     }
 }

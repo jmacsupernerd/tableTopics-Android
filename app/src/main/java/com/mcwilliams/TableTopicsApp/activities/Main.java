@@ -54,11 +54,15 @@ import retrofit.Response;
 /**
  * Created by joshuamcwilliams on 7/2/15.
  */
-public class Main extends AppCompatActivity implements ViewPager.OnPageChangeListener{
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.viewpager) ViewPager viewPager;
-    @Bind(R.id.fab) FloatingActionButton fab;
-    @Bind(R.id.tabs) TabLayout tabLayout;
+public class Main extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.viewpager)
+    ViewPager viewPager;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+    @Bind(R.id.tabs)
+    TabLayout tabLayout;
     TopicServices topicServices;
     private Dialog dialog;
 
@@ -88,9 +92,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     public void onPageScrolled(int i, float v, int i1) {
 
     }
+
     @Override
     public void onPageSelected(int i) {
-        if(i == 0){
+        if (i == 0) {
             fab.setVisibility(View.GONE);
 //            adView.setVisibility(View.GONE);
         } else {
@@ -98,6 +103,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
 //            adView.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onPageScrollStateChanged(int i) {
 
@@ -113,9 +119,9 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         String title = (String) pageTitle;
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        if(title.equals("Home")){
+        if (title.equals("Home")) {
 
-        } else if(title.equals("Topics")){
+        } else if (title.equals("Topics")) {
             alert.setTitle("Add Topic");
             View inputView = getLayoutInflater().inflate(R.layout.input_dialog, null);
             final EditText getInput = (EditText) inputView.findViewById(R.id.inputText);
@@ -174,35 +180,29 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         alert.show();
     }
 
-    public void showPredefinedTopicDialog(List<CategoryResponse.Category> categoriesList){
+    public void showPredefinedTopicDialog(List<CategoryResponse.Category> categoriesList) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Select a category");
 
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        final List<String> categoryList = new ArrayList<>();
 
-        for(CategoryResponse.Category categories : categoriesList){
-            final LvRowCategoryBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.lv_row_category, null, false);
-            binding.tvCategory.setText(categories.getCategoryName());
-            binding.tvCategory.setTag(categories.getCategoryName());
-            binding.tvCategory.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadTopicsFromCategories(v);
-                }
-            });
-            linearLayout.addView(binding.getRoot());
+        for (CategoryResponse.Category category : categoriesList) {
+            categoryList.add(category.getCategoryName());
         }
-        linearLayout.setLayoutParams(params);
+        String[] categoryArr = categoryList.toArray(new String[categoryList.size()]);
 
-        alert.setView(linearLayout);
+        alert.setSingleChoiceItems(categoryArr, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                loadTopicsFromCategories(categoryList.get(which));
+            }
+        });
         dialog = alert.create();
         dialog.show();
     }
 
-    public void loadTopicsFromCategories(View v){
-        Call<CategoryTopicList> getTopics = topicServices.getTopicsByCategory((String) v.getTag());
+    public void loadTopicsFromCategories(String category) {
+        Call<CategoryTopicList> getTopics = topicServices.getTopicsByCategory(category);
         getTopics.enqueue(new Callback<CategoryTopicList>() {
             @Override
             public void onResponse(Response<CategoryTopicList> response) {
@@ -217,10 +217,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         });
     }
 
-    public void onCategoryClicked(List<CategoryTopicList.Topic> topics){
+    public void onCategoryClicked(List<CategoryTopicList.Topic> topics) {
         final List<Topic> topicList = new ArrayList<>();
 
-        for(CategoryTopicList.Topic topic: topics){
+        for (CategoryTopicList.Topic topic : topics) {
             Topic newTopic = new Topic(topic.getTopic());
             topicList.add(newTopic);
         }
@@ -239,7 +239,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         dialogBinding.tbToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                for (Topic topic: topicList) {
+                for (Topic topic : topicList) {
                     TableTopicsApplication.db.addTopic(new Topic(topic.get_topic()));
                 }
                 Topics.reloadData();

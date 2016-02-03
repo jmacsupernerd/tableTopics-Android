@@ -9,8 +9,8 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryDark">@color/lighter_blue</item>
-        <item name="colorAccent">#FF4081</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="colorAccent">#444747</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 

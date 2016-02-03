@@ -3,7 +3,7 @@
 
     <style name="Theme.App" parent="AppTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/lighter_blue</item>
+        <item name="android:statusBarColor">@color/blue</item>
     </style>
 
 </resources>

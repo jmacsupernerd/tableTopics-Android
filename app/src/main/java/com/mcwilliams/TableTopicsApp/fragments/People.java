@@ -3,6 +3,7 @@ package com.mcwilliams.TableTopicsApp.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -40,7 +41,6 @@ public class People extends Fragment {
     public static RecyclerView peopleRV;
     private ItemTouchHelper.SimpleCallback simpleCallback;
     private ItemTouchHelper itemTouchHelper;
-    private static List<Member> memberList = new ArrayList<>();
     private static PeopleRVAdapter peopleRVAdapter;
 
     @Nullable
@@ -55,8 +55,7 @@ public class People extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        memberList = TableTopicsApplication.db.getAllMembers();
-        peopleRVAdapter = new PeopleRVAdapter(memberList);
+        peopleRVAdapter = new PeopleRVAdapter(TableTopicsApplication.db.getAllMembers());
         peopleRV.setAdapter(peopleRVAdapter);
     }
 
@@ -72,13 +71,13 @@ public class People extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                final Member member = memberList.get(position);
-                memberList.remove(member);
+                final Member member = peopleRVAdapter.getMember(position);
+                TableTopicsApplication.db.deleteMember(member);
                 refresh();
-                Snackbar.make(getActivity().findViewById(R.id.main_content), member.get_name() + " deleted", Snackbar.LENGTH_SHORT).setAction("Undo", new View.OnClickListener() {
+                Snackbar.make(getActivity().findViewById(R.id.main_content), member.get_name() + " deleted", Snackbar.LENGTH_SHORT).setActionTextColor(getResources().getColor(R.color.blue)).setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        memberList.add(member);
+                        TableTopicsApplication.db.addMember(member);
                         refresh();
                         Log.d(TAG, "onClick: Added back to UI");
                     }
@@ -87,7 +86,6 @@ public class People extends Fragment {
                     public void onDismissed(Snackbar snackbar, int event) {
                         super.onDismissed(snackbar, event);
                         Log.d(TAG, "onDismissed: Remove from DB");
-                        TableTopicsApplication.db.deleteMember(member);
                     }
                 }).show();
             }
@@ -98,7 +96,6 @@ public class People extends Fragment {
 
     public static void reloadData() {
         Log.d("", "reloaded");
-        memberList = TableTopicsApplication.db.getAllMembers();
         refresh();
     }
 
@@ -113,7 +110,7 @@ public class People extends Fragment {
     }
 
     public static void refresh() {
-        peopleRVAdapter.addAllMembers(memberList);
+        peopleRVAdapter.addAllMembers(TableTopicsApplication.db.getAllMembers());
         peopleRVAdapter.notifyDataSetChanged();
     }
 

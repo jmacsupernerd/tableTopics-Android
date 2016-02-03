@@ -62,6 +62,10 @@ public class PeopleRVAdapter extends RecyclerView.Adapter<PeopleRVAdapter.ViewHo
 
     }
 
+    public Member getMember(int position){
+        return memberList.get(position);
+    }
+
     public interface OnItemClickListener {
         public void onItemClick(View view , int position);
     }
