@@ -3,6 +3,7 @@ package com.mcwilliams.TableTopicsApp.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -40,6 +41,7 @@ import com.mcwilliams.TableTopicsApp.model.response.CategoryResponse;
 import com.mcwilliams.TableTopicsApp.model.response.CategoryTopicList;
 import com.mcwilliams.TableTopicsApp.model.response.TopicsByCategory;
 import com.mcwilliams.TableTopicsApp.utils.network.TopicServices;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ import retrofit.Response;
  * Created by joshuamcwilliams on 7/2/15.
  */
 public class Main extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+    private static final String TAG = Main.class.getSimpleName();
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.viewpager)

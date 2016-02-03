@@ -1,10 +1,12 @@
 package com.mcwilliams.TableTopicsApp.fragments;
 
 import android.app.AlertDialog;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.mcwilliams.TableTopicsApp.model.Member;
 import com.mcwilliams.TableTopicsApp.model.Topic;
 import com.mcwilliams.TableTopicsApp.utils.DatabaseHandler;
 import com.mcwilliams.TableTopicsApp.utils.Utils;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.List;
 
@@ -30,9 +33,11 @@ import butterknife.OnClick;
 /**
  * Created by joshuamcwilliams on 7/2/15.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ShakeDetector.Listener{
     @Bind(R.id.memberName) TextView memberName;
     @Bind(R.id.topicText) TextView topicName;
+    ShakeDetector sd;
+    SensorManager sensorManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,12 +46,31 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        sensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
+        sd = new ShakeDetector(this);
+        sd.start(sensorManager);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sd.stop();
+    }
+
     @OnClick(R.id.generate)
     public void onClick() {
         generateRandomTopicsMembers(TableTopicsApplication.db, memberName, topicName);
     }
 
-    public void generateRandomTopicsMembers(DatabaseHandler db, TextView memberName, TextView topicName) {
+    @Override
+    public void hearShake() {
+        generateRandomTopicsMembers(TableTopicsApplication.db, memberName, topicName);
+    }
+
+    public static void generateRandomTopicsMembers(DatabaseHandler db, TextView memberName, TextView topicName) {
         if (db.getAllMembers().size() > 0 && db.getAllTopics().size() > 0) {
             if (db.getAllMembers().size() > 1) {
                 memberName.setText(db.getAllMembers().get(Utils.randInt(db.getAllMembers().size())).get_name());
@@ -60,7 +84,7 @@ public class HomeFragment extends Fragment {
                 topicName.setText(db.getAllTopics().get(0).get_topic());
             }
         } else {
-            AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder adb = new AlertDialog.Builder(TableTopicsApplication.getAppContext());
             adb.setTitle("Error").setMessage("Please enter some people and topics").setPositiveButton("Ok", null);
             adb.show();
         }

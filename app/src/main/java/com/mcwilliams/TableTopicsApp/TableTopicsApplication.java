@@ -1,6 +1,7 @@
 package com.mcwilliams.TableTopicsApp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import com.mcwilliams.TableTopicsApp.utils.DatabaseHandler;
@@ -19,11 +20,19 @@ public class TableTopicsApplication extends Application {
     public static Retrofit retrofit;
     public static String DOMAIN_URL = "https://api.backendless.com/v1/";
 
+    private static Context context;
+
+    public static Context getAppContext() {
+        return TableTopicsApplication.context;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         db = new DatabaseHandler(this);
+
+        TableTopicsApplication.context = getApplicationContext();
 
         OkHttpClient client = new OkHttpClient();
         client.interceptors().add(new ParseKeyRequestInterceptor());
