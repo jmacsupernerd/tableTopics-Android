@@ -1,10 +1,15 @@
 package com.mcwilliams.TableTopicsApp.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -66,6 +72,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     FloatingActionButton fab;
     @Bind(R.id.tabs)
     TabLayout tabLayout;
+    @Bind(R.id.main_content)
+    CoordinatorLayout mainContent;
+    @Bind(R.id.bottom_nav)
+    BottomNavigationView bottomNavigationView;
     TopicServices topicServices;
     private Dialog dialog;
 
@@ -78,9 +88,40 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-        fab.setVisibility(View.GONE);
-
         viewPager.addOnPageChangeListener(this);
+
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                bottomNavigationView.getMenu().clear();
+                bottomNavigationView.inflateMenu(R.menu.bottom_nav_layout);
+                return true;
+            }
+        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_my_usaa:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.action_paybills:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.action_transfer:
+                        viewPager.setCurrentItem(2);
+                        break;
+                    case 200:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case 300:
+                        viewPager.setCurrentItem(0);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -99,7 +140,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     @Override
     public void onPageSelected(int i) {
         if (i == 0) {
-            fab.setVisibility(View.GONE);
+//            fab.setVisibility(View.GONE);
 //            adView.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
@@ -114,7 +155,24 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
 
     @OnClick(R.id.fab)
     public void fabClicked() {
-        showDialog(viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()));
+        int count = bottomNavigationView.getMenu().size();
+        if (count == 3) {
+            MenuItem menuItem = bottomNavigationView.getMenu().add(0, 200, 0, "Accounts");
+            menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_account_box_white_24dp));
+        }
+        if (count == 4) {
+            MenuItem menuItem = bottomNavigationView.getMenu().add(0, 300, 0, "Feedback");
+            menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_card_giftcard_white_24dp));
+        }
+        if (count == 5) {
+            bottomNavigationView.getMenu().removeItem(300);
+        }
+
+//        showDialog(viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()));
+    }
+
+    public Activity getActivity() {
+        return this;
     }
 
     public void showDialog(CharSequence pageTitle) {

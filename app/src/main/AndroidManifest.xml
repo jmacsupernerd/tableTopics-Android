@@ -15,8 +15,7 @@
         android:theme="@style/Theme.App">
 
         <activity android:name=".activities.Main"
-            android:label="Table Topics"
-            android:screenOrientation="portrait">
+            android:label="Table Topics">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

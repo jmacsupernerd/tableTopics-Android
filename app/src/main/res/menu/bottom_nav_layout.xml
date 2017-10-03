@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_my_usaa"
+        android:enabled="true"
+        android:title="My Usaa"
+        android:icon="@drawable/ic_accessibility_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_paybills"
+        android:enabled="true"
+        android:title="Pay Bills"
+        android:icon="@drawable/ic_account_balance_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_transfer"
+        android:enabled="true"
+        android:icon="@drawable/ic_bookmark_white_24dp"
+        android:title="Transfer Funds"
+        app:showAsAction="ifRoom" />
+</menu>
