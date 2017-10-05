@@ -46,6 +46,7 @@ import com.mcwilliams.TableTopicsApp.model.Topic;
 import com.mcwilliams.TableTopicsApp.model.response.CategoryResponse;
 import com.mcwilliams.TableTopicsApp.model.response.CategoryTopicList;
 import com.mcwilliams.TableTopicsApp.model.response.TopicsByCategory;
+import com.mcwilliams.TableTopicsApp.utils.bottomnav.MyBottomNavigationView;
 import com.mcwilliams.TableTopicsApp.utils.network.TopicServices;
 import com.squareup.seismic.ShakeDetector;
 
@@ -75,7 +76,10 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
     @Bind(R.id.main_content)
     CoordinatorLayout mainContent;
     @Bind(R.id.bottom_nav)
-    BottomNavigationView bottomNavigationView;
+    MyBottomNavigationView bottomNavigationView;
+    @Bind(R.id.bottom_nav_native)
+    BottomNavigationView bottomNavigationViewNative;
+    private boolean isNativeVisible = true;
     TopicServices topicServices;
     private Dialog dialog;
 
@@ -90,16 +94,7 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(this);
 
-        fab.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                bottomNavigationView.getMenu().clear();
-                bottomNavigationView.inflateMenu(R.menu.bottom_nav_layout);
-                return true;
-            }
-        });
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new MyBottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
@@ -117,6 +112,30 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
                         break;
                     case 300:
                         viewPager.setCurrentItem(0);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        bottomNavigationViewNative.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_my_usaa:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.action_paybills:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.action_transfer:
+                        viewPager.setCurrentItem(2);
+                        break;
+                    case R.id.action_go_home:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.action_transfer_account:
+                        viewPager.setCurrentItem(1);
                         break;
                 }
                 return true;
@@ -155,19 +174,15 @@ public class Main extends AppCompatActivity implements ViewPager.OnPageChangeLis
 
     @OnClick(R.id.fab)
     public void fabClicked() {
-        int count = bottomNavigationView.getMenu().size();
-        if (count == 3) {
-            MenuItem menuItem = bottomNavigationView.getMenu().add(0, 200, 0, "Accounts");
-            menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_account_box_white_24dp));
+        if (isNativeVisible) {
+            bottomNavigationViewNative.setVisibility(View.GONE);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            isNativeVisible = false;
+        } else {
+            bottomNavigationViewNative.setVisibility(View.VISIBLE);
+            bottomNavigationView.setVisibility(View.GONE);
+            isNativeVisible = true;
         }
-        if (count == 4) {
-            MenuItem menuItem = bottomNavigationView.getMenu().add(0, 300, 0, "Feedback");
-            menuItem.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_card_giftcard_white_24dp));
-        }
-        if (count == 5) {
-            bottomNavigationView.getMenu().removeItem(300);
-        }
-
 //        showDialog(viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()));
     }
 
